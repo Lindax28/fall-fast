@@ -144,19 +144,18 @@ function myLoop() {
     
         // set a random scale for the drop - no point them all being the same size!
         // drop.scale.set(0.1 + Math.random() * 0.1);
-        drop.scale.set(0.05);
+        drop.scale.set(0.04);
+        drop.width = 120;
     
         // finally lets set the drop to be at a random position..
         if (i % 2 == 0) {
-          drop.x = Math.random() * (app.screen.width/2 - 50) + 50;
+          drop.x = Math.random() * (app.screen.width/2 - 60) + 50;
           drop.y = 100;
         } else {
-          drop.x = Math.random() * (app.screen.width-50 - app.screen.width/2) + app.screen.width/2;
+          drop.x = Math.random() * (app.screen.width-60 - app.screen.width/2) + app.screen.width/2;
           drop.y = 100;
         }
 
-
-    
         // drop.tint = Math.random() * 0xFFFFFF;
     
         // create some extra properties that will control movement :
@@ -213,6 +212,10 @@ let wavePos = -1;
 app.ticker.add(() => {
   if (richText) {
     richText.text = `Score: ${score}`;
+  }
+
+  if (drops.length === 0 && repeat >= totalDrops) {
+    app.stage.addChild(replayButton);
   }
 
   cloud1.x += increment1;
@@ -310,8 +313,6 @@ const update = () => {
       });     
       typedText.scale.set(6);
       drop.addChild(typedText);
-      // typedText.anchor.x = 0.5;
-      // typedText.anchor.y = -0.5;
     }
     else if (typedWord[0] === ' ' && drop.children[0].text[0] === typedKey) {
       typedWord[0] = typedKey;
@@ -324,8 +325,6 @@ const update = () => {
       });    
       typedText.scale.set(6);
       drop.addChild(typedText);
-      // typedText.anchor.x = 0.5;
-      // typedText.anchor.y = -0.5;
       break;
     }
     else if (drop.children[0].text.slice(0, 2) === typedWord.join("").trim() + typedKey) {
@@ -339,8 +338,6 @@ const update = () => {
       });    
       typedText.scale.set(6);
       drop.addChild(typedText);
-      // typedText.anchor.x = 0.5;
-      // typedText.anchor.y = -0.5;
       break;
     }
     else if (drop.children[0].text.slice(0, 3) === typedWord.join("").trim() + typedKey) {
@@ -354,8 +351,6 @@ const update = () => {
       });     
       typedText.scale.set(6);
       drop.addChild(typedText);
-      // typedText.anchor.x = 0.5;
-      // typedText.anchor.y = -0.5;
       break;
     }
     else if (drop.children[0].text.slice(0, 4) === typedWord.join("").trim() + typedKey) {
@@ -369,8 +364,6 @@ const update = () => {
       });     
       typedText.scale.set(6);
       drop.addChild(typedText);
-      // typedText.anchor.x = 0.5;
-      // typedText.anchor.y = -0.5;
       break;
     }
     else if (drop.children[0].text.slice(0, 5) === typedWord.join("").trim() + typedKey) {
@@ -384,8 +377,6 @@ const update = () => {
       });     
       typedText.scale.set(6);
       drop.addChild(typedText);
-      // typedText.anchor.x = 0.5;
-      // typedText.anchor.y = -0.5;
       break;
     }
     else if (drop.children[0].text.slice(0, 6) === typedWord.join("").trim() + typedKey) {
@@ -399,8 +390,6 @@ const update = () => {
       });     
       typedText.scale.set(6);
       drop.addChild(typedText);
-      // typedText.anchor.x = 0.5;
-      // typedText.anchor.y = -0.5;
       break;
     }
     else if (drop.children[0].text.slice(0, 7) === typedWord.join("").trim() + typedKey) {
@@ -414,8 +403,6 @@ const update = () => {
       });     
       typedText.scale.set(6);
       drop.addChild(typedText);
-      // typedText.anchor.x = 0.5;
-      // typedText.anchor.y = -0.5;
       break;
     }
     else if (drop.children[0].text.slice(0, 8) === typedWord.join("").trim() + typedKey) {
@@ -429,8 +416,6 @@ const update = () => {
       });     
       typedText.scale.set(6);
       drop.addChild(typedText);
-      // typedText.anchor.x = 0.5;
-      // typedText.anchor.y = -0.5;
       typedWord = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
       setTimeout(() => {
         app.stage.removeChild(drop);
@@ -439,20 +424,6 @@ const update = () => {
       }, 200)
       break;
     }
-
-    // else {
-    //   typedText = new PIXI.Text(drop.children[0].text,
-    //   {
-    //     fontSize: 50,
-    //     fontFamily: 'Arial',
-    //     align : 'center',
-    //     cacheAsBitmap: true, // for better performance
-    //   });     
-    //   typedText.scale.set(6);
-    //   drop.addChild(typedText);
-    //   // typedText.anchor.x = 0.5;
-    //   // typedText.anchor.y = -0.5;
-    // }
   }
 }
 
