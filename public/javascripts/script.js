@@ -15,16 +15,17 @@ axios.get('/words')
 let score = 0;
 let misses = 0;
 let richText;
-const drops = [];
+let drops = [];
 const totalDrops = 15;
-let i = 1;
+let repeat = 1;
 
 // place start button in center of screen
-const startButton = PIXI.Sprite.from('public/images/start.png');
-startButton.anchor.set(-0.3, -1);
+const startButton = PIXI.Sprite.from('public/images/play.png');
+startButton.anchor.set(-0.9, -1.7);
+startButton.scale.set(2);
 startButton.interactive = true;
 startButton.buttonMode = true;
-startButton.on('pointerdown', onClick);
+startButton.on('pointerdown', onClickStart);
 app.stage.addChild(startButton);
 
 // place clouds at top of screen
@@ -77,8 +78,16 @@ waves.anchor.set(0, 1);
 waves.scale.set(0.4);
 app.stage.addChild(waves);
 
+// place replay button offscreen
+const replayButton = PIXI.Sprite.from('public/images/replay.png');
+replayButton.anchor.set(-0.9, -1.7);
+replayButton.scale.set(2);
+replayButton.interactive = true;
+replayButton.buttonMode = true;
+replayButton.on('pointerdown', onClickReplay);
+
 // start game by clicking start button
-function onClick() {
+function onClickStart() {
   app.stage.removeChild(startButton);
 
   const scoreStyle = new PIXI.TextStyle({
@@ -105,6 +114,22 @@ function onClick() {
 
   app.stage.addChild(richText);
 
+  myLoop();
+}
+
+function onClickReplay() {
+  app.stage.removeChild(replayButton);
+  waves.anchor.set(0, 1);
+  wavePos = -1;
+  score = 0;
+  misses = 0;
+  repeat = 1;
+  drops = [];
+  app.stage.addChild(log1);
+  app.stage.addChild(log2);
+  app.stage.addChild(log3);
+  app.stage.addChild(log4);
+  app.stage.addChild(log5);
   myLoop();
 }
 
@@ -169,8 +194,8 @@ function myLoop() {
         app.screen.height + dropBoundsPadding * 2);
     }
 
-    i++;
-    if (i < totalDrops && misses < 5) {
+    repeat++;
+    if (repeat < totalDrops && misses < 5) {
       myLoop();
     }
   }, 2500)
@@ -237,39 +262,39 @@ app.ticker.add(() => {
     if (drop.y >= maxBottom && typedWord[0] != " " && drop.children[0].text.startsWith(typedWord.join("").trim())) {
       typedWord = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];   
     }
-    if (drop.y >= maxBottom) {
+    if (drop.y >= maxBottom && drop.parent) {
       app.stage.removeChild(drop);
       drops.splice(i, 1);
       misses += 1;
     }
-    switch (misses) {
-      case 1:
-        app.stage.removeChild(log2)
-        break;
-      case 2:
-        app.stage.removeChild(log4)
-        break;
-      case 3:
-        app.stage.removeChild(log1)
-        break;
-      case 4:
-        app.stage.removeChild(log5)
-        break;
-      case 5:
-        app.stage.removeChild(log3)
-        if (wavePos > 0.1) {
-          wavePos = 0.2;
-        } else {
-          wavePos += 0.02;
-        }
-        console.log(wavePos)
-        waves.anchor.set(0, wavePos);
-        for (let i = 0; i < drops.length; i++) {
-          deleteDrop = drops[i]
-          app.stage.removeChild(deleteDrop)
-        }
-        break;
-    }
+  }
+  switch (misses) {
+    case 1:
+      app.stage.removeChild(log2)
+      break;
+    case 2:
+      app.stage.removeChild(log4)
+      break;
+    case 3:
+      app.stage.removeChild(log1)
+      break;
+    case 4:
+      app.stage.removeChild(log5)
+      break;
+    case 5:
+      app.stage.removeChild(log3)
+      repeat = totalDrops;
+      for (let i = drops.length - 1; i >= 0; i--) {
+        deleteDrop = drops[i]
+        app.stage.removeChild(deleteDrop)
+      }
+      if (wavePos > 0.1) {
+        wavePos = 0.2;
+      } else {
+        wavePos += 0.02;
+      }
+      waves.anchor.set(0, wavePos);
+      app.stage.addChild(replayButton);
   }
 });
 
@@ -443,6 +468,3 @@ document.addEventListener('keydown', e => {
   typedKey = e.key;
   update();
 }, false);
-
-
-
