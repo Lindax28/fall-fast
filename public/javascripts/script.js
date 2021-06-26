@@ -240,7 +240,7 @@ app.ticker.add(() => {
     increment3 = 0.3;
   }
   // iterate through the drops and update their position
-  for (let i = drops.length - 1; i >= 0; i--) {
+  for (let i = 0; i < drops.length; i++) {
       const drop = drops[i];
       // drop.direction += drop.turningSpeed * 0.01;
       // drop.x += Math.sin(drop.direction) * drop.speed;
@@ -315,7 +315,6 @@ const update = () => {
     }
     else if (typedWord[0] === ' ' && drop.children[0].text[0] === typedKey) {
       typedWord[0] = typedKey;
-      console.log(typedWord)
       typedText = new PIXI.Text(typedWord.join(""),
       {
         fontSize: 50,
@@ -331,7 +330,6 @@ const update = () => {
     }
     else if (drop.children[0].text.slice(0, 2) === typedWord.join("").trim() + typedKey) {
       typedWord[1] = typedKey;
-      console.log(typedWord)
       typedText = new PIXI.Text(typedWord.join(""),
       {
         fontSize: 50,
@@ -347,7 +345,6 @@ const update = () => {
     }
     else if (drop.children[0].text.slice(0, 3) === typedWord.join("").trim() + typedKey) {
       typedWord[2] = typedKey;
-      console.log(typedWord)
       typedText = new PIXI.Text(typedWord.join(""),
       {
         fontSize: 50,
@@ -363,7 +360,6 @@ const update = () => {
     }
     else if (drop.children[0].text.slice(0, 4) === typedWord.join("").trim() + typedKey) {
       typedWord[3] = typedKey;
-      console.log(typedWord)
       typedText = new PIXI.Text(typedWord.join(""),
       {
         fontSize: 50,
@@ -379,7 +375,6 @@ const update = () => {
     }
     else if (drop.children[0].text.slice(0, 5) === typedWord.join("").trim() + typedKey) {
       typedWord[4] = typedKey;
-      console.log(typedWord)
       typedText = new PIXI.Text(typedWord.join(""),
       {
         fontSize: 50,
@@ -395,7 +390,6 @@ const update = () => {
     }
     else if (drop.children[0].text.slice(0, 6) === typedWord.join("").trim() + typedKey) {
       typedWord[5] = typedKey;
-      console.log(typedWord)
       typedText = new PIXI.Text(typedWord.join(""),
       {
         fontSize: 50,
@@ -411,7 +405,6 @@ const update = () => {
     }
     else if (drop.children[0].text.slice(0, 7) === typedWord.join("").trim() + typedKey) {
       typedWord[6] = typedKey;
-      console.log(typedWord)
       typedText = new PIXI.Text(typedWord.join(""),
       {
         fontSize: 50,
@@ -427,7 +420,6 @@ const update = () => {
     }
     else if (drop.children[0].text.slice(0, 8) === typedWord.join("").trim() + typedKey) {
       typedWord[7] = typedKey;
-      console.log(typedWord)
       typedText = new PIXI.Text(typedWord.join(""),
       {
         fontSize: 50,
