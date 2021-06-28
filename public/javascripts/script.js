@@ -16,17 +16,73 @@ let score = 0;
 let misses = 0;
 let richText;
 let drops = [];
-const totalDrops = 15;
+let totalDrops = 5;
 let repeat = 1;
+let speed = 0.5;
+let wait = 2000;
 
-// place start button in center of screen
-const startButton = PIXI.Sprite.from('public/images/play.png');
-startButton.anchor.set(-0.9, -1.7);
-startButton.scale.set(2);
-startButton.interactive = true;
-startButton.buttonMode = true;
-startButton.on('pointerdown', onClickStart);
-app.stage.addChild(startButton);
+// initialize sound effects
+function sound(src) {
+  this.sound = document.createElement("audio");
+  this.sound.src = src;
+  this.sound.setAttribute("preload", "auto");
+  this.sound.setAttribute("controls", "none");
+  this.sound.style.display = "none";
+  document.body.appendChild(this.sound);
+  this.play = function(){
+    this.sound.play();
+  }
+  this.stop = function(){
+    this.sound.pause();
+    this.sound.currentTime = 0;
+  }
+}
+const dropSound = new sound("public/sounds/drop.wav");
+const splashSound = new sound("public/sounds/splash.wav");
+const bubblingSound = new sound("public/sounds/bubbling.wav");
+const rainSound = new sound("public/sounds/rain.wav");
+const sheeshSound = new sound("public/sounds/sheesh.mp3");
+
+// place volume button in bottom right corner
+const volumeButton = PIXI.Sprite.from('public/images/volume.png')
+volumeButton.anchor.set(-14, -9.5);
+volumeButton.scale.set(0.1);
+volumeButton.interactive = true;
+volumeButton.buttonMode = true;
+volumeButton.on('pointerdown', onClickMute);
+app.stage.addChild(volumeButton);
+
+// place mute button in bottom right corner
+const muteButton = PIXI.Sprite.from('public/images/mute.png')
+muteButton.anchor.set(-14.9, -11.4);
+muteButton.scale.set(0.05);
+muteButton.interactive = true;
+muteButton.buttonMode = true;
+muteButton.on('pointerdown', onClickVolume);
+
+// place start buttons in center of screen
+addTitle();
+const easyButton = PIXI.Sprite.from('public/images/easy.png');
+easyButton.anchor.set(-2.2, -4);
+easyButton.scale.set(1.3);
+easyButton.interactive = true;
+easyButton.buttonMode = true;
+easyButton.on('pointerdown', onClickEasy);
+app.stage.addChild(easyButton);
+const mediumButton = PIXI.Sprite.from('public/images/medium.png');
+mediumButton.anchor.set(-1.6, -5.2);
+mediumButton.scale.set(1.3);
+mediumButton.interactive = true;
+mediumButton.buttonMode = true;
+mediumButton.on('pointerdown', onClickMedium);
+app.stage.addChild(mediumButton);
+const hardButton = PIXI.Sprite.from('public/images/hard.png');
+hardButton.anchor.set(-2.2, -6.4);
+hardButton.scale.set(1.3);
+hardButton.interactive = true;
+hardButton.buttonMode = true;
+hardButton.on('pointerdown', onClickHard);
+app.stage.addChild(hardButton);
 
 // place clouds at top of screen
 const cloud1 = PIXI.Sprite.from('public/images/cloud.png');
@@ -86,10 +142,66 @@ replayButton.interactive = true;
 replayButton.buttonMode = true;
 replayButton.on('pointerdown', onClickReplay);
 
-// start game by clicking start button
-function onClickStart() {
-  app.stage.removeChild(startButton);
+// start game by clicking difficulty-level button
+function onClickEasy() {
+  app.stage.removeChild(easyButton);
+  app.stage.removeChild(mediumButton);
+  app.stage.removeChild(hardButton);
+  app.stage.removeChild(title);
+  totalDrops = 5;
+  speed = 0.4;
+  wait = 2500;
+  addScore();
+  myLoop();
+}
+function onClickMedium() {
+  app.stage.removeChild(easyButton);
+  app.stage.removeChild(mediumButton);
+  app.stage.removeChild(hardButton);
+  app.stage.removeChild(title);
+  totalDrops = 10;
+  speed = 0.7;
+  wait = 2000;
+  addScore();
+  myLoop();
+}
+function onClickHard() {
+  app.stage.removeChild(easyButton);
+  app.stage.removeChild(mediumButton);
+  app.stage.removeChild(hardButton);
+  app.stage.removeChild(title);
+  totalDrops = 15;
+  speed = 1;
+  wait = 1500;
+  addScore();
+  myLoop();
+}
 
+function addTitle() {
+  const titleStyle = new PIXI.TextStyle({
+    fontFamily: 'Comic Sans MS',
+    fontSize: 80,
+    fontWeight: 'bold',
+    fill: ['#00e1ff', '#0067c2'], // gradient
+    strokeThickness: 5,
+    dropShadow: true,
+    dropShadowColor: '#000000',
+    dropShadowBlur: 4,
+    dropShadowAngle: Math.PI / 6,
+    dropShadowDistance: 8,
+    wordWrap: true,
+    wordWrapWidth: 440,
+    letterSpacing: 8
+  });
+
+  title = new PIXI.Text("Raindrops", titleStyle);
+  title.x = 190;
+  title.y = 100;
+
+  app.stage.addChild(title);
+}
+
+function addScore() {
   const scoreStyle = new PIXI.TextStyle({
     fontFamily: 'Arial',
     fontSize: 36,
@@ -113,11 +225,10 @@ function onClickStart() {
   richText.y = app.screen.height - 100;
 
   app.stage.addChild(richText);
-
-  myLoop();
 }
 
 function onClickReplay() {
+  sheeshSound.stop();
   app.stage.removeChild(replayButton);
   waves.anchor.set(0, 1);
   wavePos = -1;
@@ -133,7 +244,52 @@ function onClickReplay() {
   myLoop();
 }
 
+function onClickMute() {
+  let sounds = document.querySelectorAll("audio");
+  [].forEach.call(sounds, sound => {
+    sound.muted = true;
+    sound.pause();
+  })
+  app.stage.removeChild(volumeButton);
+  app.stage.addChild(muteButton);
+}
+
+function onClickVolume() {
+  let sounds = document.querySelectorAll("audio");
+  [].forEach.call(sounds, sound => {
+    sound.muted = false;
+  })
+  app.stage.removeChild(muteButton)
+  app.stage.addChild(volumeButton);
+}
+
+function removeLog() {
+  switch (misses) {
+      case 1:
+        app.stage.removeChild(log2)
+        splashSound.play();
+        break;
+      case 2:
+        app.stage.removeChild(log4)
+        splashSound.play();
+        break;
+      case 3:
+        app.stage.removeChild(log1)
+        splashSound.play();
+        break;
+      case 4:
+        app.stage.removeChild(log5)
+        splashSound.play();
+        break;
+      case 5:
+        app.stage.removeChild(log3)
+        bubblingSound.play();
+        app.stage.addChild(replayButton);
+    }
+}
+
 function myLoop() {
+  rainSound.play();
   setTimeout(() => {
     for (let i = 0; i < Math.random() * 2; i++) {
         // create a new Sprite that uses the image name that we just generated as its source
@@ -166,7 +322,7 @@ function myLoop() {
         // drop.turningSpeed = 0;
     
         // create a random speed for the drop between 2 - 4
-        drop.speed = 0.5;
+        drop.speed = speed;
     
         // finally we push the drop into the drops array so it it can be easily accessed later
         drops.push(drop);
@@ -197,10 +353,10 @@ function myLoop() {
     if (repeat < totalDrops && misses < 5) {
       myLoop();
     }
-  }, 2500)
+  }, wait)
 }
 
-const maxBottom = app.screen.height - 100;
+const maxBottom = app.screen.height - 80;
 let typedKey = "";
 let typedWord = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '];
 let typedText = "";
@@ -216,6 +372,7 @@ app.ticker.add(() => {
 
   if (drops.length === 0 && repeat >= totalDrops) {
     app.stage.addChild(replayButton);
+    sheeshSound.play();
   }
 
   cloud1.x += increment1;
@@ -269,23 +426,9 @@ app.ticker.add(() => {
       app.stage.removeChild(drop);
       drops.splice(i, 1);
       misses += 1;
+      removeLog();
     }
-  }
-  switch (misses) {
-    case 1:
-      app.stage.removeChild(log2)
-      break;
-    case 2:
-      app.stage.removeChild(log4)
-      break;
-    case 3:
-      app.stage.removeChild(log1)
-      break;
-    case 4:
-      app.stage.removeChild(log5)
-      break;
-    case 5:
-      app.stage.removeChild(log3)
+    if (misses === 5) {
       repeat = totalDrops;
       for (let i = drops.length - 1; i >= 0; i--) {
         deleteDrop = drops[i]
@@ -294,10 +437,10 @@ app.ticker.add(() => {
       if (wavePos > 0.1) {
         wavePos = 0.2;
       } else {
-        wavePos += 0.02;
+        wavePos += 0.01;
       }
       waves.anchor.set(0, wavePos);
-      app.stage.addChild(replayButton);
+    }
   }
 });
 
@@ -420,6 +563,7 @@ const update = () => {
       setTimeout(() => {
         app.stage.removeChild(drop);
         drops.splice(i, 1);
+        dropSound.play();
         score += 1;
       }, 200)
       break;

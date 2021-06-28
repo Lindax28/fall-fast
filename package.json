@@ -17,6 +17,7 @@
     "start:debug": "DEBUG=* node app.js"
   },
   "dependencies": {
+    "@pixi/sound": "^4.0.4",
     "axios": "^0.21.1",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
