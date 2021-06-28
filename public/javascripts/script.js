@@ -63,21 +63,21 @@ muteButton.on('pointerdown', onClickVolume);
 // place start buttons in center of screen
 addTitle();
 const easyButton = PIXI.Sprite.from('public/images/easy.png');
-easyButton.anchor.set(-2.2, -4);
+easyButton.anchor.set(-2.2, -4.8);
 easyButton.scale.set(1.3);
 easyButton.interactive = true;
 easyButton.buttonMode = true;
 easyButton.on('pointerdown', onClickEasy);
 app.stage.addChild(easyButton);
 const mediumButton = PIXI.Sprite.from('public/images/medium.png');
-mediumButton.anchor.set(-1.6, -5.2);
+mediumButton.anchor.set(-1.6, -6);
 mediumButton.scale.set(1.3);
 mediumButton.interactive = true;
 mediumButton.buttonMode = true;
 mediumButton.on('pointerdown', onClickMedium);
 app.stage.addChild(mediumButton);
 const hardButton = PIXI.Sprite.from('public/images/hard.png');
-hardButton.anchor.set(-2.2, -6.4);
+hardButton.anchor.set(-2.2, -7.2);
 hardButton.scale.set(1.3);
 hardButton.interactive = true;
 hardButton.buttonMode = true;
@@ -148,6 +148,7 @@ function onClickEasy() {
   app.stage.removeChild(mediumButton);
   app.stage.removeChild(hardButton);
   app.stage.removeChild(title);
+  app.stage.removeChild(instructions);
   totalDrops = 5;
   speed = 0.4;
   wait = 2500;
@@ -159,6 +160,7 @@ function onClickMedium() {
   app.stage.removeChild(mediumButton);
   app.stage.removeChild(hardButton);
   app.stage.removeChild(title);
+  app.stage.removeChild(instructions);
   totalDrops = 10;
   speed = 0.7;
   wait = 2000;
@@ -170,6 +172,7 @@ function onClickHard() {
   app.stage.removeChild(mediumButton);
   app.stage.removeChild(hardButton);
   app.stage.removeChild(title);
+  app.stage.removeChild(instructions);
   totalDrops = 15;
   speed = 1;
   wait = 1500;
@@ -197,8 +200,13 @@ function addTitle() {
   title = new PIXI.Text("Raindrops", titleStyle);
   title.x = 190;
   title.y = 100;
-
+  instructions = new PIXI.Text("Type the words on each raindrop before they fall and break the dam!")
+  instructions.x = 190;
+  instructions.y = 100;
+  instructions.scale.set(0.9);
+  instructions.anchor.set(0.2, -4.7);
   app.stage.addChild(title);
+  app.stage.addChild(instructions);
 }
 
 function addScore() {
