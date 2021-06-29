@@ -1,4 +1,4 @@
-const app = new PIXI.Application({backgroundColor: 0x555251});
+const app = new PIXI.Application({backgroundColor: 0xa1a1a1});
 document.body.appendChild(app.view);
 
 // query for words array
