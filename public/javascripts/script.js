@@ -267,6 +267,7 @@ function onClickVolume() {
   [].forEach.call(sounds, sound => {
     sound.muted = false;
   })
+  rainSound.play();
   app.stage.removeChild(muteButton)
   app.stage.addChild(volumeButton);
 }
