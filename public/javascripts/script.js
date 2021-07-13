@@ -1,4 +1,9 @@
 const app = new PIXI.Application({backgroundColor: 0xa1a1a1});
+
+app.view.style.position = 'absolute';
+app.view.style.left = '50%';
+app.view.style.top = '50%';
+app.view.style.transform = 'translate3d( -50%, -50%, 0 )';
 document.body.appendChild(app.view);
 
 // query for words array
