@@ -1,9 +1,9 @@
 # Raindrops
-![Raindrop](public/images/raindrop.png)
+<img src="public/images/raindrop.png" width="100">
 
 [Raindrops Live Site](https://raindrops-game.herokuapp.com/)
 
-Raindrops is a speed-typing game designed to improve typing speed through practice. As the words in raindrops fall, type them out before they break the dam!
+Raindrops is a speed-typing game designed to improve typing speed through practice. As the words fall, type them out before they break the dam!
 
 Raindrops was built with:
 - JavaScript
@@ -16,14 +16,14 @@ Raindrops was built with:
 ### Losing
 The game begins with a dam at the bottom of the screen consisting of five logs. If a raindrop reaches the dam before the word is completely typed, a log is dislodged. Once all logs are dislodged, the game is over.
 
-To implement this, the game begins with five lives. Once a raindrop falls below a coordinate near the bottom of the screen, the drop is removed, a log is removed, and the lives counter is decremented. Once zero lives are remaining, all logs and drops are removed.
+To implement this, the game begins with five lives. Once a raindrop falls below a coordinate near the bottom of the screen, the drop is removed, a log is removed, and the lives counter is decremented by one. Once zero lives are remaining, all logs and drops are removed and the game is over.
 
 ![Missed Words](https://media.giphy.com/media/filatVfYCxwmrlDVdf/giphy.gif)
 
 ### Winning
 When a word is typed, the typed letters are denoted in red. Once a word is completed, the raindrop evaporates. The game is won once all words have been typed.
 
-Identifying which word the user is attempting to type involves looping through an array of words currently on the screen. When a keypress is identified, the words are iterated through in order of appearance until a match is found. Once a matching first letter is found, the process is repeated to match a keypress to the first two letters, then three, and so on. Once an entire word is matched, the drop is removed and the current matches are reset. 
+Identifying which word the user is attempting to type involves looping through an array of words currently on the screen. When a keypress is identified, the words are iterated through in order of appearance until a match is found. Once a matching first letter is found, the process is repeated to match a keypress to the first two letters, then three, and so on. Once an entire word is matched, the drop is removed, the score is incremented by one, and the current typed word is reset. 
 
 ![Typing](https://media.giphy.com/media/n9YTRYIRfPml6PNNRN/giphy.gif)
 
