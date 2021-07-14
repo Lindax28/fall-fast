@@ -179,7 +179,7 @@ function onClickHard() {
   app.stage.removeChild(title);
   app.stage.removeChild(instructions);
   totalDrops = 15;
-  speed = 1;
+  speed = 1.1;
   wait = 1500;
   addScore();
   myLoop();
